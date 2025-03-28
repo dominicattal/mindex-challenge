@@ -36,6 +36,24 @@ namespace CodeCodeChallenge.Tests.Integration
         }
 
         [TestMethod]
+        public void RequestDirectReports_Returns_Ok()
+        {
+            // Arrange
+            var employeeId = "16a596ae-edd3-4847-99fe-c4518e82c86f";
+            var expectedNumReports = 4;
+
+            // Execute
+            var getRequestTask = _httpClient.GetAsync($"api/employee/report/{employeeId}");
+            var response = getRequestTask.Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            var reportingStructure = response.DeserializeContent<ReportingStructure>();
+            Assert.AreEqual(employeeId, reportingStructure.EmployeeId);
+            Assert.AreEqual(expectedNumReports, reportingStructure.numberOfReports);
+        }
+
+        [TestMethod]
         public void CreateEmployee_Returns_Created()
         {
             // Arrange
@@ -146,23 +164,6 @@ namespace CodeCodeChallenge.Tests.Integration
 
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
-        }
-
-        [TestMethod]
-        public async void RequestDirectReports_Returns_Ok()
-        {
-            // Arrange
-            var employeeId = "16a596ae-edd3-4847-99fe-c4518e82c86f";
-            var expectedNumReports = 4;
-
-            // Execute
-            var getRequestTask = await _httpClient.GetAsync($"api/employee/report/{employeeId}");
-
-            // Assert
-            Assert.AreEqual(HttpStatusCode.OK, getRequestTask.StatusCode);
-            var reportingStructure = getRequestTask.DeserializeContent<ReportingStructure>();
-            Assert.AreEqual(employeeId, reportingStructure.EmployeeId);
-            Assert.AreEqual(expectedNumReports, reportingStructure.numberOfReports);
         }
 
         [TestMethod]

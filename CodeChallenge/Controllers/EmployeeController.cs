@@ -76,6 +76,7 @@ namespace CodeChallenge.Controllers
             // Keep track of seen employees to check for circular references
             HashSet<String> seen = new HashSet<String>();
 
+            int res = employee.DirectReports.Count;
             int count = 0;
             while (stack.Count > 0) {
                 var empId = stack.Pop();

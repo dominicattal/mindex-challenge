@@ -25,11 +25,9 @@ namespace CodeChallenge.Services
                 return compensation;
             
             var existingCompensation = _compensationRepository.GetById(compensation.EmployeeId);
-            if (existingCompensation == null) {
-                _compensationRepository.Add(compensation);
-            } else {
+            if (existingCompensation != null)
                 _compensationRepository.Remove(existingCompensation);
-            }
+
             _compensationRepository.Add(compensation);
 
             return compensation;
