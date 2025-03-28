@@ -1,0 +1,7 @@
+CodeChallenge/bin
+CodeChallenge/obj
+CodeChallenge.Tests/obj
+CodeChallenge.Tests/bin
+.vs
+.github
+CodeChallenge.Tests/TestResults

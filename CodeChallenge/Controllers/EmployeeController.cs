@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CodeChallenge.Services;
 using CodeChallenge.Models;
+using System.Collections;
 
 namespace CodeChallenge.Controllers
 {
@@ -57,6 +58,50 @@ namespace CodeChallenge.Controllers
             _employeeService.Replace(existingEmployee, newEmployee);
 
             return Ok(newEmployee);
+        }
+
+        [HttpGet("report/{id}")]
+        public IActionResult GetEmployeeNumberOfReports(String id)
+        {
+            _logger.LogDebug($"Received employee report request for '{id}'");
+
+            var employee = _employeeService.GetById(id);
+            if (employee == null)
+                return NotFound();
+
+            // Use dfs with stack to find all employees
+            Stack<String> stack = new Stack<String>();
+            stack.Push(id);
+
+            // Keep track of seen employees to check for circular references
+            HashSet<String> seen = new HashSet<String>();
+
+            int count = 0;
+            while (stack.Count > 0) {
+                var empId = stack.Pop();
+
+                // If we've seen this employee before, stop the search
+                if (seen.Contains(empId))
+                    return Conflict(new { message = "Circular reference detected, operation aborted"});
+                seen.Add(empId);
+
+                // check if employee has direct reports
+                employee = _employeeService.GetById(empId);
+                if (employee.DirectReports == null) {
+                    continue;
+                }
+
+                // parse the next employee
+                foreach (var emp in employee.DirectReports) {
+                    stack.Push(emp.EmployeeId);
+                    count += 1;
+                }
+            }
+            
+            return Ok(new ReportingStructure {
+                EmployeeId = id,
+                numberOfReports = count
+            });
         }
     }
 }
