@@ -1,0 +1,22 @@
+[
+    {
+        "employeeId": "16a596ae-edd3-4847-99fe-c4518e82c86f",
+        "salary": 25000,
+        "effectiveDate": "2004-01-01"
+    },
+    {
+        "employeeId": "b7839309-3348-463b-a7e3-5de1c168beb3",
+        "salary": 27000,
+        "effectiveDate": "1995-01-01"
+    },
+    {
+        "employeeId": "03aa1462-ffa9-4978-901b-7c001562cf6f",
+        "salary": 29000,
+        "effectiveDate": "1967-01-01"
+    },
+    {
+        "employeeId": "62c1084e-6e34-4630-93fd-9153afb65309",
+        "salary": 31000,
+        "effectiveDate": "1000-01-01"
+    }
+]

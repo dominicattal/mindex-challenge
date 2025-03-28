@@ -12,6 +12,7 @@ namespace CodeChallenge.Data
     {
         private EmployeeContext _employeeContext;
         private const String EMPLOYEE_SEED_DATA_FILE = "resources/EmployeeSeedData.json";
+        private const String COMPENSATION_SEED_DATA_FILE = "resources/CompensationSeedData.json";
 
         public EmployeeDataSeeder(EmployeeContext employeeContext)
         {
@@ -23,7 +24,9 @@ namespace CodeChallenge.Data
             if(!_employeeContext.Employees.Any())
             {
                 List<Employee> employees = LoadEmployees();
+                List<Compensation> compensations = LoadCompensations();
                 _employeeContext.Employees.AddRange(employees);
+                _employeeContext.Compensations.AddRange(compensations);
 
                 await _employeeContext.SaveChangesAsync();
             }
@@ -41,6 +44,20 @@ namespace CodeChallenge.Data
                 FixUpReferences(employees);
 
                 return employees;
+            }
+        }
+
+        private List<Compensation> LoadCompensations()
+        {
+            using (FileStream fs = new FileStream(COMPENSATION_SEED_DATA_FILE, FileMode.Open))
+            using (StreamReader sr = new StreamReader(fs))
+            using (JsonReader jr = new JsonTextReader(sr))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+
+                List<Compensation> compensations = serializer.Deserialize<List<Compensation>>(jr);
+
+                return compensations;
             }
         }
 
